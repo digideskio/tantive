@@ -1,0 +1,23 @@
+{
+  "name": "tantive",
+  "version": "0.0.1",
+  "description": "Future rocket ship.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chuck Harmston",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "babelify": "^6.1.3",
+    "browserify": "^11.0.1",
+    "connect-redis": "^2.4.1",
+    "express": "^4.13.3",
+    "express-graphql": "^0.3.0",
+    "express-session": "^1.11.3",
+    "graphql": "^0.4.2",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-live-server": "0.0.23"
+  }
+}
