@@ -17,10 +17,10 @@ var watch = require('gulp-watch');
 
 var PATHS = {
   BUILD: {
-    CSS: path.join(__dirname, 'build', 'css'),
+    CSS: path.join(__dirname, 'build', 'static', 'css'),
     HTML: path.join(__dirname, 'build'),
-    IMG: path.join(__dirname, 'build', 'img'),
-    JS: path.join(__dirname, 'build', 'js'),
+    IMG: path.join(__dirname, 'build', 'static', 'img'),
+    JS: path.join(__dirname, 'build', 'static', 'js'),
   },
   SRC: {
     CSS: path.join(__dirname, 'src', 'public', 'css'),

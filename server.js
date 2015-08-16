@@ -1,3 +1,5 @@
+import path from 'path';
+
 import express from 'express';
 import graphQLServer from 'express-graphql';
 import session from 'express-session';
@@ -11,9 +13,9 @@ let RedisStore = sessionRedis(session);
 
 // Homepage and static files.
 app.get('/', (req, res) => {
-  res.send('I have a bad feeling about this.');
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-app.use(express.static('public'));
+app.use(express.static('build'));
 
 // Use Redis for session storage.
 app.use(session({
