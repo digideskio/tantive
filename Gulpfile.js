@@ -17,11 +17,13 @@ var uglify = require('gulp-uglify');
 var PATHS = {
   BUILD: {
     CSS: path.join(__dirname, 'build', 'css'),
+    HTML: path.join(__dirname, 'build'),
     IMG: path.join(__dirname, 'build', 'img'),
     JS: path.join(__dirname, 'build', 'js'),
   },
   SRC: {
     CSS: path.join(__dirname, 'src', 'public', 'css'),
+    HTML: path.join(__dirname, 'src', 'public'),
     IMG: path.join(__dirname, 'src', 'public', 'img'),
     JS: path.join(__dirname, 'src', 'public', 'js'),
   },
@@ -30,6 +32,7 @@ var PATHS = {
 
 var GLOBS = {
   CSS: path.resolve(PATHS.SRC.CSS, '**/*.styl'),
+  HTML: path.resolve(PATHS.SRC.HTML, '**/*.html'),
   IMG: path.resolve(PATHS.SRC.IMG, '*'),
   JS: [
     path.resolve(PATHS.SRC.JS, '**/*.js'),
@@ -69,17 +72,23 @@ gulp.task('js', function() {
 
 gulp.task('img', function() {
   return gulp
-  .src(GLOBS.IMG)
-  .pipe(imagemin({
-    progressive: true,
-    svgoPlugins: [{
-      removeViewBox: false
-    }],
-    use: [
-      pngquant()
-    ]
-  }))
-  .pipe(gulp.dest(PATHS.BUILD.IMG));
+    .src(GLOBS.IMG)
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{
+        removeViewBox: false
+      }],
+      use: [
+        pngquant()
+      ]
+    }))
+    .pipe(gulp.dest(PATHS.BUILD.IMG));
+});
+
+gulp.task('html', function() {
+  return gulp
+    .src(GLOBS.HTML)
+    .pipe(gulp.dest(PATHS.BUILD.HTML));
 });
 
 gulp.task('server', function() {
