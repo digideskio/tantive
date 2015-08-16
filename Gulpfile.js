@@ -1,15 +1,21 @@
+var buffer = require('vinyl-buffer');
+var browserify = require('browserify');
 var concat = require('gulp-concat');
 var gulp = require('gulp');
 var gls = require('gulp-live-server');
 var minifyCss = require('gulp-minify-css');
 var nib = require('nib');
 var path = require('path');
+var source = require('vinyl-source-stream');
+var sourcemaps = require('gulp-sourcemaps');
 var stylus = require('gulp-stylus');
+var uglify = require('gulp-uglify');
 
 
 var PATHS = {
   BUILD: {
-    CSS: path.join(__dirname, 'build', 'css')
+    CSS: path.join(__dirname, 'build', 'css'),
+    JS: path.join(__dirname, 'build', 'js'),
   },
   SRC: {
     CSS: path.join(__dirname, 'src', 'public', 'css'),
@@ -21,7 +27,7 @@ var PATHS = {
 
 
 gulp.task('css', function() {
-  gulp
+  return gulp
     .src(path.resolve(PATHS.SRC.CSS, '**/*.styl'))
     .pipe(stylus({
       compress: true,
@@ -32,6 +38,21 @@ gulp.task('css', function() {
     .pipe(concat('bundle.css'))
     .pipe(minifyCss())
     .pipe(gulp.dest(PATHS.BUILD.CSS));
+});
+
+gulp.task('js', function() {
+  return browserify({
+    entries: path.join(PATHS.SRC.JS, 'app.js'),
+    debug: true
+  }).bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({
+      loadMaps: true
+    }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(PATHS.BUILD.JS));
 });
 
 gulp.task('server', function() {
