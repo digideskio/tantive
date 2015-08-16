@@ -3,9 +3,11 @@ var browserify = require('browserify');
 var concat = require('gulp-concat');
 var gulp = require('gulp');
 var gls = require('gulp-live-server');
+var imagemin = require('gulp-imagemin');
 var minifyCss = require('gulp-minify-css');
 var nib = require('nib');
 var path = require('path');
+var pngquant = require('imagemin-pngquant');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var stylus = require('gulp-stylus');
@@ -15,6 +17,7 @@ var uglify = require('gulp-uglify');
 var PATHS = {
   BUILD: {
     CSS: path.join(__dirname, 'build', 'css'),
+    IMG: path.join(__dirname, 'build', 'img'),
     JS: path.join(__dirname, 'build', 'js'),
   },
   SRC: {
@@ -25,10 +28,19 @@ var PATHS = {
   SERVER: path.join(__dirname, 'index.js'),
 };
 
+var GLOBS = {
+  CSS: path.resolve(PATHS.SRC.CSS, '**/*.styl'),
+  IMG: path.resolve(PATHS.SRC.IMG, '*'),
+  JS: [
+    path.resolve(PATHS.SRC.JS, '**/*.js'),
+    path.resolve(PATHS.SRC.JS, '**/*.jsx'),
+  ]
+};
+
 
 gulp.task('css', function() {
   return gulp
-    .src(path.resolve(PATHS.SRC.CSS, '**/*.styl'))
+    .src(GLOBS.CSS)
     .pipe(stylus({
       compress: true,
       use: [
@@ -53,6 +65,21 @@ gulp.task('js', function() {
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(PATHS.BUILD.JS));
+});
+
+gulp.task('img', function() {
+  return gulp
+  .src(GLOBS.IMG)
+  .pipe(imagemin({
+    progressive: true,
+    svgoPlugins: [{
+      removeViewBox: false
+    }],
+    use: [
+      pngquant()
+    ]
+  }))
+  .pipe(gulp.dest(PATHS.BUILD.IMG));
 });
 
 gulp.task('server', function() {
