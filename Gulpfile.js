@@ -12,6 +12,7 @@ var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var stylus = require('gulp-stylus');
 var uglify = require('gulp-uglify');
+var watch = require('gulp-watch');
 
 
 var PATHS = {
@@ -91,10 +92,18 @@ gulp.task('html', function() {
     .pipe(gulp.dest(PATHS.BUILD.HTML));
 });
 
+gulp.task('watch', function() {
+  gulp.watch(GLOBS.CSS, ['css']);
+  gulp.watch(GLOBS.HTML, ['html']);
+  gulp.watch(GLOBS.IMG, ['img']);
+  gulp.watch(GLOBS.JS, ['js']);
+});
+
 gulp.task('server', function() {
   var server = gls.new(PATHS.SERVER);
   server.start();
   gulp.watch(PATHS.SERVER, server.start.bind(server)); 
 });
 
-gulp.task('default', ['server']);
+gulp.task('build', ['css', 'html', 'img', 'js']);
+gulp.task('default', ['build', 'server', 'watch']);
