@@ -12,10 +12,10 @@ let app = express();
 let RedisStore = sessionRedis(session);
 
 // Homepage and static files.
-app.get('/', (req, res) => {
+app.use(express.static('build'));
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-app.use(express.static('build'));
 
 // Use Redis for session storage.
 app.use(session({
@@ -33,7 +33,7 @@ app.use('/api', graphQLServer({
 }));
 
 // Get the server started.
-let server = app.listen(3000, () => {
+let server = app.listen(3333, () => {
   let host = server.address().address;
   let port = server.address().port;
   console.log('Server running at http://localhost:3000');

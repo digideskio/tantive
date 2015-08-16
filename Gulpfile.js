@@ -1,3 +1,4 @@
+var babelify = require('babelify');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var concat = require('gulp-concat');
@@ -8,6 +9,7 @@ var minifyCss = require('gulp-minify-css');
 var nib = require('nib');
 var path = require('path');
 var pngquant = require('imagemin-pngquant');
+var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var stylus = require('gulp-stylus');
@@ -59,7 +61,8 @@ gulp.task('css', function() {
 gulp.task('js', function() {
   return browserify({
     entries: path.join(PATHS.SRC.JS, 'app.js'),
-    debug: true
+    debug: true,
+    transform: [babelify, reactify],
   }).bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
