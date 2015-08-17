@@ -5,14 +5,22 @@ import graphQLServer from 'express-graphql';
 import session from 'express-session';
 import sessionRedis from 'connect-redis';
 
-import schema from './src/data/schema';
+import schema from './data/schema';
 
 
 let app = express();
 let RedisStore = sessionRedis(session);
 
-// Homepage and static files.
+// First, we'll nab static files.
 app.use(express.static('build'));
+
+// Then we'll hit a GraphQL API server.
+app.use('/api', graphQLServer({
+  pretty: true,
+  schema: schema,
+}));
+
+// Everything else goes to React.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
@@ -26,14 +34,8 @@ app.use(session({
   secret: 'Great, kid. Don’t get cocky.'
 }));
 
-// Start a GraphQL server at /api.
-app.use('/api', graphQLServer({
-  pretty: true,
-  schema: schema,
-}));
-
 // Get the server started.
-let server = app.listen(3333, () => {
+let server = app.listen(3000, () => {
   let host = server.address().address;
   let port = server.address().port;
   console.log('Server running at http://localhost:3000');
